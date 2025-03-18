@@ -15,7 +15,7 @@ jobs:
       - name: Generate XCFramework
         run: ./gradlew :shared:assembleSharedXCFramework
       - name: Zip XCFramework
-        run: zip -r Shared.xcframework.zip build/XCFrameworks/release/Shared.xcframework
+        run: zip -r Shared.xcframework.zip shared/build/XCFrameworks/release/Shared.xcframework
       - name: Upload to GitHub Releases
         uses: softprops/action-gh-release@v1
         with:
