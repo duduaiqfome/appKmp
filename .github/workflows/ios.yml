@@ -30,6 +30,12 @@ jobs:
           CHECKSUM=$(swift package compute-checksum Shared.xcframework.zip)
           echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
       
+      - name: Upload to GitHub Releases
+      uses: softprops/action-gh-release@v1
+         with:
+           tag: ${{ env.RELEASE_TAG }}
+           files: Shared.xcframework.zip
+           
       - name: Update Swift Package Repo
         env:
           SWIFT_PACKAGE_REPO_TOKEN: ${{ secrets.SWIFT_PACKAGE_REPO_TOKEN }}
