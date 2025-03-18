@@ -1,0 +1,21 @@
+# .github/workflows/publish-xcframework.yml (no Repositório A)
+name: Publish XCFramework
+
+on:
+  push:
+    tags:
+      - 'v*-kmp'
+
+jobs:
+  build-and-publish:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate XCFramework
+        run: ./gradlew :shared:assembleSharedXCFramework
+      - name: Zip XCFramework
+        run: zip -r Shared.xcframework.zip build/XCFrameworks/Shared.xcframework
+      - name: Upload to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Shared.xcframework.zip
