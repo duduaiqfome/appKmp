@@ -4,6 +4,8 @@ name: Publish XCFramework
 on:
   push:
     branches: [ "main" ]
+  tags:
+      - 'v*'
   pull_request:
     branches: [ "main" ]
 
@@ -17,6 +19,6 @@ jobs:
       - name: Zip XCFramework
         run: zip -r Shared.xcframework.zip shared/build/XCFrameworks/release/Shared.xcframework
       - name: Upload to GitHub Releases
-        uses: softprops/action-gh-release@v0.1.4
+        uses: softprops/action-gh-release@v1
         with:
           files: Shared.xcframework.zip
