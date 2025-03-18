@@ -3,8 +3,9 @@ name: Publish XCFramework
 
 on:
   push:
-    tags:
-      - 'v*-kmp'
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build-and-publish:
