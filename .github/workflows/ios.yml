@@ -3,14 +3,14 @@ name: Publish XCFramework
 on:
   push:
     tags:
-      - 'v*'  # Trigger the workflow on tag pushes
+      - 'v*'
 
 jobs:
   build-and-publish:
     runs-on: macos-latest
     permissions:
       contents: write
-      
+
     steps:
       - uses: actions/checkout@v4
       
@@ -20,11 +20,32 @@ jobs:
       - name: Zip XCFramework
         run: zip -r Shared.xcframework.zip shared/build/XCFrameworks/release/Shared.xcframework
       
-      - name: Extract Tag Name
-        run: echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Get Release Tag
+        id: get-tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       
-      - name: Upload to GitHub Releases
-        uses: softprops/action-gh-release@v1
-        with:
-          tag: ${{ env.RELEASE_TAG }}
-          files: Shared.xcframework.zip
+      - name: Compute Checksum
+        id: checksum
+        run:
+          CHECKSUM=$(swift package compute-checksum Shared.xcframework.zip)
+          echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
+      
+      - name: Update Swift Package Repo
+        env:
+          SWIFT_PACKAGE_REPO_TOKEN: ${{ secrets.SWIFT_PACKAGE_REPO_TOKEN }}  # Crie este secret com um PAT
+        run:
+          # Clone o repositório swift-package
+          git clone https://github.com/duduaiqfome/swift-package.git
+          cd swift-package
+
+          # Atualiza o Package.swift com a nova versão e checksum
+          sed -i '' "s|download/\(v[0-9.]\+\)/Shared.xcframework.zip|download/${{ env.TAG }}/Shared.xcframework.zip|g" Package.swift
+          sed -i '' "s|checksum: \".*\"|checksum: \"${{ env.CHECKSUM }}\"|g" Package.swift
+
+          # Faz commit e push
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add Package.swift
+          git commit -m "Update to ${{ env.TAG }}"
+          git tag ${{ env.TAG }}
+          git push origin main --tags
