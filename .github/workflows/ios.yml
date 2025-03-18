@@ -31,10 +31,10 @@ jobs:
           echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
       
       - name: Upload to GitHub Releases
-          uses: softprops/action-gh-release@v1
-             with:
-               tag: ${{ env.RELEASE_TAG }}
-               files: Shared.xcframework.zip
+        uses: softprops/action-gh-release@${{ env.TAG }}
+        with:
+          tag: ${{ env.RELEASE_TAG }}
+          files: Shared.xcframework.zip
            
       - name: Update Swift Package Repo
         env:
