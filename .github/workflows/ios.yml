@@ -1,22 +1,27 @@
-# .github/workflows/publish-xcframework.yml (no Repositório A)
 name: Publish XCFramework
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v*'  # Trigger the workflow on tag pushes
 
 jobs:
   build-and-publish:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Generate XCFramework
         run: ./gradlew :shared:assembleSharedXCFramework
+      
       - name: Zip XCFramework
         run: zip -r Shared.xcframework.zip shared/build/XCFrameworks/release/Shared.xcframework
+      
+      - name: Extract Tag Name
+        run: echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      
       - name: Upload to GitHub Releases
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v0.1.5
         with:
+          tag: ${{ env.RELEASE_TAG }}
           files: Shared.xcframework.zip
