@@ -34,7 +34,7 @@ jobs:
         env:
           SWIFT_PACKAGE_REPO_TOKEN: ${{ secrets.SWIFT_PACKAGE_REPO_TOKEN }}
         run: |
-          git clone git@github.com:duduaiqfome/appKmp.git
+          git clone https://${SWIFT_PACKAGE_REPO_TOKEN}@github.com/duduaiqfome/swift-package.git
           cd swift-package
           sed -i '' "s|download/\(v[0-9.]\+\)/Shared.xcframework.zip|download/${{ env.TAG }}/Shared.xcframework.zip|g" Package.swift
           sed -i '' "s|checksum: \".*\"|checksum: \"${{ env.CHECKSUM }}\"|g" Package.swift
