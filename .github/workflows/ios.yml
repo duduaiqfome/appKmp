@@ -36,8 +36,8 @@ jobs:
         run: |
           git clone https://github.com/duduaiqfome/swift-package.git
           cd swift-package
-          sed -i "s|download/\(v[0-9.]\+\)/Shared.xcframework.zip|download/${{ env.TAG }}/Shared.xcframework.zip|g" Package.swift
-          sed -i "s|checksum: \".*\"|checksum: \"${{ env.CHECKSUM }}\"|g" Package.swift
+          sed -i '' "s|download/\(v[0-9.]\+\)/Shared.xcframework.zip|download/${{ env.TAG }}/Shared.xcframework.zip|g" Package.swift
+          sed -i '' "s|checksum: \".*\"|checksum: \"${{ env.CHECKSUM }}\"|g" Package.swift
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add Package.swift
