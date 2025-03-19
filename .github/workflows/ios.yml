@@ -50,7 +50,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ env.TAG }}
+          tag_name: ${{ env.TAG }}
           name: "Release ${{ env.TAG }}"
           body: "Release ${{ env.TAG }} of Shared XCFramework"
           files: Shared.xcframework.zip
