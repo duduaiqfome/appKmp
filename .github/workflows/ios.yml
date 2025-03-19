@@ -44,6 +44,9 @@ jobs:
           git tag ${{ env.TAG }}
           git push origin ${{ env.TAG }}
 
+      - name: Fetch Tags
+        run: git fetch --tags
+        
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -51,6 +54,8 @@ jobs:
           name: "Release ${{ env.TAG }}"
           body: "Release ${{ env.TAG }} of Shared XCFramework"
           files: Shared.xcframework.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Swift Package Repo
         env:
