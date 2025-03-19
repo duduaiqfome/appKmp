@@ -63,7 +63,7 @@ jobs:
         run: |
           git clone https://x-access-token:$SWIFT_PACKAGE_REPO_TOKEN@github.com/duduaiqfome/swift-package.git
           cd swift-package
-          sed -i '' "s|url: \".*\", from: \".*\"|url: \"$KMP_REPO_URL\", from: \"${{ env.TAG }}\"|g" Package.swift
+          sed -i '' -E "s|download/(v[0-9.]+)/Shared.xcframework.zip|download/${TAG}/Shared.xcframework.zip|g" Package.swift
           sed -i '' "s|checksum: \".*\"|checksum: \"${{ env.CHECKSUM }}\"|g" Package.swift
           git add Package.swift
           git commit -m "Update to ${{ env.TAG }}"
