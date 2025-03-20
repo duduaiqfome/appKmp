@@ -8,7 +8,7 @@ plugins {
 }
 
 kotlin {
-    val xcframeworkName = "Shared"
+    val xcframeworkName = "AiqShared"
     val xcf = XCFramework(xcframeworkName)
 
     androidTarget {
@@ -24,7 +24,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Shared"
+            baseName = xcframeworkName
             isStatic = true
 
             xcf.add(this)
